@@ -138,13 +138,15 @@ var threadView = (function(emailData, el) {
             }
         });
         this.links = newLinks;
-        this.force.links(this.links)
+        this.force.links(obj.links);
 
-        var path = this.svg.selectAll("path")
+        var path = this.pathsObject.selectAll("path")
             .data(obj.force.links());
 
         path.enter().append("svg:path")
-            .attr("marker-end","url(#response)");
+            .attr("marker-end","url(#response)")
+            .attr("id", function(d) { return "path"+d.source.index+"|"+d.target.index;})
+            //.on("mouseover", obj.pathOver);;
         path.exit().remove();
 
         this.force.start()
@@ -159,7 +161,7 @@ var threadView = (function(emailData, el) {
             h = 500;
 
         this.nodes = {};
-        this.links = obj.data.getThreadLinks().slice();
+        this.links = obj.data.getThreadLinks();
         this.links.forEach(function(link) {
             link.source = obj.nodes[link.source] || (obj.nodes[link.source] = {email: link.source});
             link.target = obj.nodes[link.target] || (obj.nodes[link.target] = {email: link.target});
@@ -170,7 +172,8 @@ var threadView = (function(emailData, el) {
             .size([w, h])
             .linkDistance(180)
             .charge(-200)
-            .on("tick", tick);
+            .on("tick", tick)
+            .start();
 
         this.svg = d3.select(el).append("svg:svg")
             .attr("width",w)
@@ -179,20 +182,22 @@ var threadView = (function(emailData, el) {
         this.svg.append("svg:defs")
             .append("svg:marker")
             .attr("id", "response")
-            .attr("viewBox", "0 0 20 20")
-            .attr("refX", 0)
-            .attr("refY", 10)
-            .attr("markerWidth", 8)
-            .attr("markerHeight", 6)
-            .attr("markerUnits","strokeWidth")
+            .attr("refX", 11)
+            .attr("refY", 5)
+            .attr("markerWidth", 5)
+            .attr("markerHeight",10)
             .attr("orient", "auto")
             .append("svg:path")
-            .attr("d", "M 0 0 L 20 10 L 0 20 z");
+            .attr("d", "M 0 0 5 5 0 10 Z")
+            .attr("style","fill:black;")
 
-        var path = this.svg.append("svg:g").selectAll("path")
+        this.pathsObject = this.svg.append("svg:g");
+        this.path = this.pathsObject.selectAll("path")
             .data(obj.force.links())
             .enter().append("svg:path")
-            .attr("marker-end","url(#response)");
+            .attr("marker-end","url(#response)")
+            .attr("id", function(d) { return "path"+d.source.index+"|"+d.target.index;})
+            //.on("mouseover", obj.pathOver);
 
         var circle = this.svg.append("svg:g").selectAll("circle")
             .data(obj.force.nodes())
@@ -205,12 +210,12 @@ var threadView = (function(emailData, el) {
             .enter().append("svg:g");
 
         text.append("svg:text")
-            .attr("x", 20)
+            .attr("x", 12)
             .attr("y", ".31em")
             .text(function(d) { return d.email; });
 
         function tick() {
-            path.attr("d", function(d) {
+            obj.pathsObject.selectAll("path").attr("d", function(d) {
                 var dx = d.target.x - d.source.x,
                     dy = d.target.y - d.source.y,
                     dr = 0
@@ -224,9 +229,29 @@ var threadView = (function(emailData, el) {
             text.attr("transform", function(d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
+            /*obj.svg.selectAll("textPath").attr("xlink:href",function(d) {
+                return "#path"+d.source.index+"|"+d.target.index;
+            });*/
         }
         this.force.start();
     };
+    /*obj.pathOver = function(d, evt) {
+        var target = d3.select(this);
+        target.attr("style","stroke:red;");
+        var data = target.data()[0];
+        var textpath = obj.svg.append("svg:text")
+            .attr("font-size", 10)
+            .append("svg:textPath")
+            .attr("xlink:href",function() {
+                return "#path"+data.source.index+"|"+data.target.index;
+            })
+            .attr("startOffset",20)
+            .text(function() { return data.subject;});
+        target.on("mouseout",function() {
+            target.attr("style",null);
+            textpath.remove();
+        })
+    };*/
     return obj;
 }(emailData, "#threadGraph"));
 

@@ -47,13 +47,19 @@ h2 {
 }
 #threadGraph path {
     fill:none;
-    stroke:#666;
-    stroke-width: 1.5px;
+    stroke: #c9c9c9;
+    stroke-width: 1px;
 }
 #threadGraph text{
     font-size:11px;
 }
-
+#threadGraph circle {
+    fill: #0000aa;
+}
+#threadGraph circle:hover {
+    fill: #00003b;
+    cursor:pointer;
+}
 #emailtotals .axis path,
 #emailtotals .axis line {
   fill: none;
