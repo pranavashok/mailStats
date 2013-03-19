@@ -1,0 +1,16 @@
+# Ignore all emacs backup files
+*~
+\#*#
+
+#WebStorm ignores
+.idea
+.DS_Store
+
+#config/data files
+config
+data
+userdata
+emails.js
+
+#python ignore
+*.py[cod]

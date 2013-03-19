@@ -1,0 +1,77 @@
+
+h1 {
+    font-family: Georgia;
+    font-size:26px;
+}
+h2 {
+    font-family: Georgia;
+    font-size:20px;
+}
+
+#datalist {
+    height:240px;
+    width:400px;
+    float:left;
+    overflow:auto;
+    border: 1px solid black;
+}
+#datalist input{
+    width:60%;
+    font-size:16px;
+    height:16px;
+}
+#datalist span {
+    font-size:12px;
+    padding:5px;
+    text-decoration: underline;
+}
+#datalist span:hover {
+    color:blue;
+    cursor:pointer;
+}
+#datalist ul{
+    list-style-type: none;
+    margin:0;
+    padding:0;
+}
+#datalist li{
+    border-bottom: black 1px dashed;
+    padding: 2px 0 2px 0;
+}
+#datalist li.selected{
+    background-color: #e3e3e3
+}
+#datalist li:hover{
+    background-color: #c2c2c2;
+    cursor:pointer;
+}
+#threadGraph path {
+    fill:none;
+    stroke:#666;
+    stroke-width: 1.5px;
+}
+#threadGraph text{
+    font-size:11px;
+}
+
+#emailtotals .axis path,
+#emailtotals .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#emailtotals .x.axis text {
+    font-size: 12px;
+}
+#emailtotals .y.axis text {
+    font-size: 12px;
+}
+#emailtotals .line {
+  fill: none;
+  stroke: #2fa7fa;
+  stroke-width: 2.5px;
+}
+#emailtotals circle {
+    fill: #195c87;
+}
